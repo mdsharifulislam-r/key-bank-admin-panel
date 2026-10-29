@@ -10,6 +10,7 @@ import { DataTable } from '@/components/common/DataTable'
 import { FormField } from '@/components/common/FormField'
 import { ImagePreview } from '@/components/common/ImagePreview'
 import { ImageUpload } from '@/components/common/ImageUpload'
+import { LocationPicker } from '@/components/common/LocationPicker'
 import { PageHeader } from '@/components/common/PageHeader'
 import { SearchToolbar } from '@/components/common/SearchToolbar'
 import { StatusBadge } from '@/components/common/StatusBadge'
@@ -24,8 +25,8 @@ const lockerSchema = z.object({
   locker_id: z.string().min(1, 'Locker ID is required'),
   name: z.string().min(1, 'Name is required'),
   address: z.string().min(1, 'Address is required'),
-  latitude: z.string().refine((value) => Number.isFinite(Number(value)), 'Enter a latitude'),
-  longitude: z.string().refine((value) => Number.isFinite(Number(value)), 'Enter a longitude'),
+  latitude: z.string().refine((value) => Number.isFinite(Number(value)) && value !== '', 'Location is required — search an address or click the map'),
+  longitude: z.string().refine((value) => Number.isFinite(Number(value)) && value !== '', 'Location is required — search an address or click the map'),
   price: z.string().refine((value) => Number(value) >= 0, 'Enter a price'),
   description: z.string().min(1, 'Description is required'),
 })
@@ -102,6 +103,17 @@ export default function LockersPage() {
     }
   }
 
+  // Watch location values to pass into LocationPicker
+  const watchedAddress = form.watch('address')
+  const watchedLatitude = form.watch('latitude')
+  const watchedLongitude = form.watch('longitude')
+
+  const handleLocationChange = (address: string, latitude: string, longitude: string) => {
+    form.setValue('address', address, { shouldValidate: true })
+    form.setValue('latitude', latitude, { shouldValidate: true })
+    form.setValue('longitude', longitude, { shouldValidate: true })
+  }
+
   return (
     <div className="space-y-5">
       <PageHeader
@@ -174,22 +186,69 @@ export default function LockersPage() {
         }
       >
         <form className="space-y-4" onSubmit={onSubmit}>
-          {(['locker_id', 'name', 'address', 'latitude', 'longitude', 'price', 'description'] as const).map((name) => (
-            <Controller
-              key={name}
-              name={name}
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <FormField label={labelFor(name)} htmlFor={name} error={fieldState.error?.message}>
-                  {name === 'description' ? (
-                    <Input.TextArea {...field} id={name} rows={4} />
-                  ) : (
-                    <Input {...field} id={name} />
-                  )}
-                </FormField>
-              )}
+          {/* Locker ID */}
+          <Controller
+            name="locker_id"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <FormField label="Locker ID" htmlFor="locker_id" error={fieldState.error?.message}>
+                <Input {...field} id="locker_id" />
+              </FormField>
+            )}
+          />
+
+          {/* Name */}
+          <Controller
+            name="name"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <FormField label="Name" htmlFor="name" error={fieldState.error?.message}>
+                <Input {...field} id="name" />
+              </FormField>
+            )}
+          />
+
+          {/* Price */}
+          <Controller
+            name="price"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <FormField label="Price" htmlFor="price" error={fieldState.error?.message}>
+                <Input {...field} id="price" />
+              </FormField>
+            )}
+          />
+
+          {/* Description */}
+          <Controller
+            name="description"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <FormField label="Description" htmlFor="description" error={fieldState.error?.message}>
+                <Input.TextArea {...field} id="description" rows={4} />
+              </FormField>
+            )}
+          />
+
+          {/* Location (address + map) */}
+          <FormField
+            label="Location"
+            htmlFor="location-address-search"
+            error={
+              form.formState.errors.address?.message
+              ?? form.formState.errors.latitude?.message
+              ?? form.formState.errors.longitude?.message
+            }
+          >
+            <LocationPicker
+              address={watchedAddress}
+              latitude={watchedLatitude}
+              longitude={watchedLongitude}
+              onChange={handleLocationChange}
             />
-          ))}
+          </FormField>
+
+          {/* Images */}
           <FormField label="Images" htmlFor="locker-images">
             <ImageUpload
               id="locker-images"
@@ -214,17 +273,4 @@ export default function LockersPage() {
       />
     </div>
   )
-}
-
-function labelFor(name: string) {
-  const labels: Record<string, string> = {
-    locker_id: 'Locker ID',
-    name: 'Name',
-    address: 'Address',
-    latitude: 'Latitude',
-    longitude: 'Longitude',
-    price: 'Price',
-    description: 'Description',
-  }
-  return labels[name] ?? name
 }
