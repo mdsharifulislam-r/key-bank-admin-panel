@@ -1,0 +1,15 @@
+import { lazy } from 'react'
+
+export const DashboardPage = lazy(() => import('@/features/dashboard/pages/DashboardPage'))
+export const LockersPage = lazy(() => import('@/features/lockers/pages/LockersPage'))
+export const LockerDetailPage = lazy(() => import('@/features/lockers/pages/LockerDetailPage'))
+export const BookingsPage = lazy(() => import('@/features/bookings/pages/BookingsPage'))
+export const BookingDetailPage = lazy(() => import('@/features/bookings/pages/BookingDetailPage'))
+export const UsersPage = lazy(() => import('@/features/users/pages/UsersPage'))
+export const TransactionsPage = lazy(() => import('@/features/transactions/pages/TransactionsPage'))
+export const PlansPage = lazy(() => import('@/features/plans/pages/PlansPage'))
+export const ReportsPage = lazy(() => import('@/features/reports/pages/ReportsPage'))
+export const NotificationsPage = lazy(() => import('@/features/notifications/pages/NotificationsPage'))
+export const FaqsPage = lazy(() => import('@/features/faq/pages/FaqsPage'))
+export const AuditLogsPage = lazy(() => import('@/features/audit/pages/AuditLogsPage'))
+export const SettingsPage = lazy(() => import('@/features/settings/pages/SettingsPage'))

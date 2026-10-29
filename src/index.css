@@ -1,0 +1,108 @@
+@layer theme, base, antd, components, utilities;
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --color-gold: #c9961b;
+  --color-gold-deep: #a7790e;
+  --color-gold-soft: #f5e9c8;
+  --color-ink: #171a23;
+  --color-muted: #737987;
+  --color-line: #e7e9ee;
+  --color-canvas: #f6f7f9;
+  --color-success: #16a36a;
+  --color-warning: #e5a126;
+  --color-danger: #dc4c4c;
+  --color-info: #4778d5;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f6f7f9;
+  color: #171a23;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid #c9961b;
+  outline-offset: 2px;
+}
+
+.ant-btn:focus-visible,
+.ant-input:focus-visible,
+.ant-input-affix-wrapper:focus-within,
+.ant-select-focused .ant-select-selector {
+  outline: none;
+}
+
+.surface-card {
+  background: #ffffff;
+  border: 1px solid #e7e9ee;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(23, 26, 35, 0.04);
+}
+
+.surface-card .ant-table-wrapper .ant-table {
+  background: transparent;
+}
+
+.surface-card .ant-table-thead > tr > th {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.image-frame .ant-image {
+  display: block;
+  width: 100%;
+}
+
+.image-frame .ant-image-img {
+  object-fit: cover;
+}
+
+.legal-editor .jodit-container {
+  border: 1px solid #e7e9ee !important;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.legal-editor .jodit-toolbar__box {
+  background: #f8f7f4;
+  border-bottom: 1px solid #e7e9ee;
+}
+
+.legal-editor .jodit-workplace,
+.legal-editor .jodit-wysiwyg {
+  background: #ffffff;
+  color: #171a23;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
